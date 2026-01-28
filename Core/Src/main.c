@@ -68,6 +68,9 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 	uint8_t returnedToBase = 1;
 	uint32_t lastPIDTime = 0;
 
+	// Zmienne pomocnicze do wyświetlania
+	float SWVupperPosLimit, SWVlowerPosLimit, SWVbasePos;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -153,7 +156,7 @@ int main(void)
     currentServoPos = basePos;
     Servo_WriteAngle((uint16_t)currentServoPos);
     lastChangeTime = HAL_GetTick();
-
+    HAL_Delay(2000);
 
   /* USER CODE END 2 */
 
@@ -218,7 +221,7 @@ int main(void)
 	          // TRYB B: NORMALNA PRACA (PID + POTENCJOMETR)
 	          // ==========================================
 
-          // Pobranie nastaw z potencjometrów ADC i filtr EMA
+	          // Pobranie nastaw z potencjometrów ADC i filtr EMA
 	    	  float Kp_raw = 1.5f - ((adc_raw[1] * 1.5f) / 4095.0f);
 	    	  float Ki_raw = 0.5f - ((adc_raw[2] * 0.5f) / 4095.0f);
 	    	  float Kd_raw = 0.5f - ((adc_raw[3] * 0.5f) / 4095.0f);
@@ -284,15 +287,18 @@ int main(void)
 	                  pidLastError = error;
 	              }
 	          }
-      // --- WYSYŁANIE DANYCH DO WIZUALIZACJI (np. co 50ms) ---
-			static uint32_t lastUartTick = 0;
-			if (now - lastUartTick > 50) {
-				lastUartTick = now;
-				char msg[32];
-				// Wysyłamy surową wartość currentPot do wizualizacji
-				int msg_len = snprintf(msg, sizeof(msg), "%d,%.1f\r\n", currentPot, currentServoPos);
-				HAL_UART_Transmit(&huart3, (uint8_t*)msg, msg_len, 10);
-			}
+	          // --- WYSYŁANIE DANYCH DO WIZUALIZACJI (np. co 50ms) ---
+	          static uint32_t lastUartTick = 0;
+	          if (now - lastUartTick > 50) {
+	              lastUartTick = now;
+	              char msg[64];
+
+	              // Format: currentPot, currentServoPos, Kp, Ki, Kd
+	              int msg_len = snprintf(msg, sizeof(msg), "%d,%.1f,%.2f,%.2f,%.2f\r\n",
+	                                     currentPot, currentServoPos, Kp, Ki, Kd);
+
+	              HAL_UART_Transmit(&huart3, (uint8_t*)msg, msg_len, 10);
+	          }
 
 			HAL_Delay(5);
 	  }
