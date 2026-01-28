@@ -32,6 +32,14 @@ Jeśli Twoja wersja STM32CubeIDE różni się od tej użytej w projekcie, plik `
    * Kliknij ikonę **Młotka** (Build) i upewnij się, że nie ma błędów.
    * Podłącz płytkę **Nucleo-F746ZG** i kliknij ikonę **Zielonej strzałki** (Run).
 
+### 4. Opcjonalne: Webowy Monitor Pozycji (PID_ANALYZER.html)
+W repozytorium znajduje się plik `PID_ANALYZER.html`, który służy jako profesjonalny analizator odpowiedzi skokowej serwa w czasie rzeczywistym.
+1. Otwórz plik `PID_ANALYZER.html` w przeglądarce Chrome lub Edge (wymagana obsługa Web Serial API).
+2. Kliknij przycisk **POŁĄCZ Z URZĄDZENIEM**.
+3. Wybierz port COM odpowiadający Twojej płytce Nucleo.
+4. **Funkcjonalność:** Aplikacja parsuje dane z UART, wyświetla aktualny kąt oraz rysuje dynamiczny wykres pozycji, co pozwala na precyzyjne strojenie parametrów PID "w locie".
+
+
 ## Specyfikacja techniczna
 
 * **Algorytm sterowania:** Implementacja pełnego regulatora **PID** (Proporcjonalno-Całkująco-Różniczkujący) działającego w czasie rzeczywistym.
