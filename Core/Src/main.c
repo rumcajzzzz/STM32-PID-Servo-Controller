@@ -68,9 +68,6 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 	uint8_t returnedToBase = 1;
 	uint32_t lastPIDTime = 0;
 
-	// Zmienne pomocnicze do wyświetlania
-	float SWVupperPosLimit, SWVlowerPosLimit, SWVbasePos;
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -221,7 +218,7 @@ int main(void)
 	          // TRYB B: NORMALNA PRACA (PID + POTENCJOMETR)
 	          // ==========================================
 
-	          // Pobranie nastaw z potencjometrów ADC i filtr EMA
+          // Pobranie nastaw z potencjometrów ADC i filtr EMA
 	    	  float Kp_raw = 1.5f - ((adc_raw[1] * 1.5f) / 4095.0f);
 	    	  float Ki_raw = 0.5f - ((adc_raw[2] * 0.5f) / 4095.0f);
 	    	  float Kd_raw = 0.5f - ((adc_raw[3] * 0.5f) / 4095.0f);
@@ -274,7 +271,7 @@ int main(void)
 	                  float derivative = error - pidLastError;
 	                  float output = (Kp * error) + (Ki * pidIntegral) + (Kd * derivative);
 
-	                  // Ograniczenie prędkości zmiany pozycji (max 10 stopni na klatkę PID)
+	                  // Ograniczenie prędkości zmiany pozycji (max 25 stopni na klatkę PID)
 	                  output = fminf(25.0f, fmaxf(-25.0f, output));
 
 	                  currentServoPos += output;
@@ -287,7 +284,7 @@ int main(void)
 	                  pidLastError = error;
 	              }
 	          }
-		    // --- WYSYŁANIE DANYCH DO WIZUALIZACJI (np. co 50ms) ---
+      // --- WYSYŁANIE DANYCH DO WIZUALIZACJI (np. co 50ms) ---
 			static uint32_t lastUartTick = 0;
 			if (now - lastUartTick > 50) {
 				lastUartTick = now;
