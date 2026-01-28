@@ -50,15 +50,16 @@ Jeśli Twoja wersja STM32CubeIDE różni się od tej użytej w projekcie, plik `
     * Wielokanałowe przetwarzanie analogowo-cyfrowe (**ADC**) z wykorzystaniem trybu skanowania sekwencyjnego dla 4 niezależnych potencjometrów.
 
 ## Podłączenie sprzętowe
-| Komponent | Pin STM32 | Funkcja |
-| :--- | :--- | :--- |
-| **Serwo (PWM)** | PA15 (TIM2_CH1) | Sterowanie kątem |
-| **LCD (SDA/SCL)** | PB9 / PB8 | Interfejs I2C |
-| **Zadajnik Pozycji** | PC0 | ADC3_IN10 |
-| **Nastawa Kp** | PC2 | ADC3_IN12 |
-| **Nastawa Ki** | PC3 | ADC3_IN13 |
-| **Nastawa Kd** | PF3 | ADC3_IN9 |
-| **Stop Awaryjny** | PA5 | Przycisk zewnętrzny |
+| Komponent | Pin STM32 | Złącze Nucleo (Arduino) | Funkcja |
+| :--- | :--- | :--- | :--- |
+| **Zadajnik Pozycji** | PA3 | **A0** | ADC1_IN3 - Wartość zadana |
+| **Nastawa Kp** | PC0 | **A1** | ADC3_IN10 - Wzmocnienie P |
+| **Nastawa Ki** | PC3 | **A2** | ADC3_IN13 - Wzmocnienie I |
+| **Nastawa Kd** | PF3 | **A3** | ADC3_IN9 - Wzmocnienie D |
+| **Serwo (PWM)** | PA6 | **D12** | TIM3_CH1 - Sygnał sterujący |
+| **Stop Awaryjny** | PA5 | **D13** | GPIO_EXTI5 - Przycisk Awaryjny |
+| **LCD SDA** | PD13 | **-** | I2C4_SDA - Dane wyświetlacza |
+| **LCD SCL** | PD12 | **-** | I2C4_SCL - Zegar wyświetlacza |
 
 ---
 *Projekt wykonany w ramach przedmiotu Systemy Mikroprocesorowe.*
