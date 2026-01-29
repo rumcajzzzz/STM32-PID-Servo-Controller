@@ -140,23 +140,34 @@ int main(void)
   	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
     HAL_ADC_Start_DMA(&hadc3, (uint32_t*)adc_raw, 4);
 
-    HAL_Delay(100);
-    lcd_init();
+    HAL_Delay(500);
+	lcd_init();
+	lcd_clear();
 
-    lcd_clear();
-    HAL_Delay(5);
+	lcd_put_cur(0,0);
+	lcd_send_string("PID SERVO REG");
+	lcd_put_cur(1,0);
+	lcd_send_string("SYSTEM READY");
 
-    lcd_put_cur(0,0);
-    lcd_send_string("PID SERVO REG");
+	float startPot = 180.0f - ((adc_raw[0] * 180.0f) / 4095.0f);
 
-    lcd_put_cur(1,0);
-    lcd_send_string("WCZYTYWANIE...");
+	Pot_filtered = startPot;
+	lastPotValue = (uint16_t)startPot;
 
-    lastPotValue = (adc_raw[0] * 360.0f) / 4095.0f;
-    currentServoPos = basePos;
-    Servo_WriteAngle((uint16_t)currentServoPos);
-    lastChangeTime = HAL_GetTick();
-    HAL_Delay(2000);
+	Kp = 1.5f - ((adc_raw[1] * 1.5f) / 4095.0f);
+	Ki = 0.5f - ((adc_raw[2] * 0.5f) / 4095.0f);
+	Kd = 0.5f - ((adc_raw[3] * 0.5f) / 4095.0f);
+
+	currentServoPos = 90.0f;
+	Servo_WriteAngle((uint16_t)currentServoPos);
+
+	lastChangeTime = HAL_GetTick();
+	lastPIDTime = HAL_GetTick();
+
+	pidIntegral = 0.0f;
+	pidLastError = 0.0f;
+
+	HAL_Delay(1000);
 
   /* USER CODE END 2 */
 
